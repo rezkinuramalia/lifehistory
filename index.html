@@ -174,10 +174,96 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-grad
 @keyframes wave{0%,100%{transform:skewY(-3deg) scaleX(.98)}50%{transform:skewY(3deg) scaleX(1)}}.flag figcaption{font:700 .95rem 'Baloo 2';margin-top:10px}
 @media (max-width:820px){section{padding:11vh 5vw}.gh{top:2vh}}
 @media (max-width:560px){section{padding:9vh 5vw}.card{max-width:100%;width:100%}.mem{width:140px}.mem.ibu{width:100%;max-width:210px}.mem .av{width:90px;height:90px}.b{padding:20px;border-radius:28px}.dec{display:none}.mapbox{padding:8px;border-radius:26px}.nar svg{max-width:44%}.sdots i{width:7px;height:7px}.sdots i.on{width:22px}}
+
+/* ===== MUSIC BUTTON ===== */
+#music-control{
+  position:fixed;
+  top:20px;
+  right:20px;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:8px;
+}
+
+#music-btn{
+  width:48px;
+  height:48px;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  color:var(--indigo);
+  box-shadow:0 6px 0 var(--lav);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+#music-btn:hover{
+  transform:translateY(-3px);
+}
+
+#music-btn .i{
+  width:22px;
+  height:22px;
+}
+
+#music-btn.off{
+  opacity:.75;
+}
+
+#music-hint{
+  background:rgba(255,255,255,.92);
+  color:var(--ink);
+  border-radius:99px;
+  padding:.45em 1em;
+  font:700 .8rem 'Nunito',sans-serif;
+  box-shadow:0 4px 0 var(--lav);
+  white-space:nowrap;
+  transition:opacity .4s ease,transform .4s ease;
+}
+
+#music-hint.hide{
+  opacity:0;
+  transform:translateY(-5px);
+  pointer-events:none;
+}
+
+@media(max-width:560px){
+  #music-control{
+    top:14px;
+    right:14px;
+  }
+
+  #music-btn{
+    width:44px;
+    height:44px;
+  }
+
+  #music-hint{
+    font-size:.72rem;
+  }
+}
 </style>
 <script>function ph(i){var d=document.createElement('div');d.className='ph';d.innerHTML='<svg class="i"><use href="#cam"/></svg>';i.replaceWith(d)}</script>
 </head>
 <body>
+  <!-- MUSIC CONTROL -->
+<div id="music-control">
+  <div id="music-hint">For a better experience, turn on the music ♫</div>
+
+  <button id="music-btn" class="off" aria-label="Turn music on" title="Turn music on">
+    <svg class="i">
+      <use href="#note"></use>
+    </svg>
+  </button>
+
+  <audio id="bg-music" loop preload="auto">
+    <source src="musik/Classicals.de - Chopin - Nocturne Op. 9, No. 2 in E-flat major.mp3" type="audio/mpeg">
+  </audio>
+</div>
 <svg style="display:none" aria-hidden="true">
 <symbol id="star" viewBox="0 0 24 24"><path d="M12 2l3 7 7 .6-5.3 4.7 1.7 7.2L12 17.8l-6.4 3.7 1.7-7.2L2 9.6 9 9z"/></symbol>
 <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 10c0 5.700-8 11-8 11z"/></symbol>
@@ -317,8 +403,8 @@ const FAM=[ // foto: foto/keluarga-<k>.jpg
 const NICK=['Memel','Memey','Melmel','Mey','Melody','Amel','Caramel','Kamel','Amalia','Ame','Rezki','Capt Marvel'];
 // foto: foto/<id>-1.jpg, foto/<id>-2.jpg, ... (n = jumlah slot foto)
 const C1=[
- {id:'tk',t:'TK Riyanti Tamarunang',p:'TK',f:['Juara 1 Menghitung','Juara 2 Menggambar'],n:2,ic:'star'},
- {id:'sd',t:'SD Inpres Batangkaluku',p:'2009',f:['Olimpiade Sains Matematika','Tingkat Kabupaten'],n:2,ic:'book'},
+ {id:'tk',t:'TK Riyanti Tamarunang',p:'TK',f:['Juara 1 Menghitung','Juara 2 Menggambar'],n:3,ic:'star'},
+ {id:'sd',t:'SD Inpres Batangkaluku',p:'2009',f:['Olimpiade Sains Matematika','Tingkat Kabupaten'],n:3,ic:'book'},
  {id:'smp',t:'MTs Negeri Gowa',p:'2015',f:['Kompetisi Sains Madrasah Matematika','Juara 1 Kab. Gowa','Lanjut tingkat Provinsi'],n:4,ic:'cup'},
  {id:'ic',t:'MAN Insan Cendekia Gowa',p:'2018',f:['2018 - 2019','KSM Matematika tingkat Kabupaten'],n:4,ic:'cup'},
  {id:'man1',t:'MAN 1 Kota Makassar',p:'2020',f:['2020 - 2021'],n:4,ic:'book'},
@@ -329,7 +415,7 @@ const C1=[
 const C2=[
  {id:'kel',t:'Foto bersama keluarga',p:'Rumah',f:['Kenangan bersama keluarga'],n:6,ic:'heart'},
  {id:'kucing',t:'Kucing-kucingku',p:'8',f:['Dulu punya 8 ekor','Sudah diadopsi dan ada yang pergi'],n:6,ic:'paw',paw:1},
- {id:'kenangan',t:'Aku, foto, dan kenangan',p:'Foto',f:['Foto random dan pemandangan favorit'],n:9,ic:'cam',g:1}];
+ {id:'kenangan',t:'Aku, foto, dan kenangan',p:'Foto',f:['Foto random dan pemandangan favorit'],n:15,ic:'cam',g:1}];
 const PAL=["#FADCFE","#C7F3F6","#A4C6E9","#dfe3ff","#B8AEE3","#FEFDF9"];
 /* ====== ====== ====== ====== */
 const I=n=>`<svg class="i"><use href="#${n}"/></svg>`;
@@ -479,6 +565,44 @@ const F=[['Inggris',`<g transform="scale(2 2.667)">${jack}</g>`],
 ['Australia',`<rect width="120" height="80" fill="#012169"/><g transform="scale(1 1.333)">${jack}</g>`+star(30,60,9,'#fff')+star(90,14,5,'#fff')+star(78,40,5,'#fff')+star(102,36,5,'#fff')+star(90,66,5,'#fff')+star(96,52,3,'#fff')]];
 const fl=document.getElementById('flags');
 fl.innerHTML=F.map((f,i)=>`<figure class="flag${i?'':' big'}"><svg viewBox="0 0 120 80" role="img" aria-label="Bendera ${f[0]}">${f[1]}</svg><figcaption>${f[0]}</figcaption></figure>`).join('');
+})();
+</script>
+<script>
+(function(){
+  const music = document.getElementById('bg-music');
+  const btn = document.getElementById('music-btn');
+  const hint = document.getElementById('music-hint');
+
+  btn.addEventListener('click', async () => {
+    if (music.paused) {
+      try {
+        await music.play();
+
+        btn.classList.remove('off');
+        btn.setAttribute('aria-label','Turn music off');
+        btn.setAttribute('title','Turn music off');
+
+        hint.textContent = 'Music is on ♫';
+        
+        setTimeout(() => {
+          hint.classList.add('hide');
+        }, 1800);
+
+      } catch(err) {
+        console.log('Music could not be played:', err);
+      }
+
+    } else {
+      music.pause();
+
+      btn.classList.add('off');
+      btn.setAttribute('aria-label','Turn music on');
+      btn.setAttribute('title','Turn music on');
+
+      hint.textContent = 'For a better experience, turn on the music ♫';
+      hint.classList.remove('hide');
+    }
+  });
 })();
 </script>
 </body>
